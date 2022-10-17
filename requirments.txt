@@ -1,0 +1,4 @@
+-i https://pypi.org/simple
+numpy==1.21.6 ; python_version < '3.11' and python_version >= '3.7'
+pydoe==0.3.8
+scipy==1.7.3
