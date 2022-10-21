@@ -27,10 +27,23 @@ def run_training():
 
   print(train_imgs[:2],train_targets[:2],train_orig_targets[:2])
 
-  train_Dataset = Dataset.Classification(train_imgs,train_targets)
+  train_Dataset = Dataset.Classification(train_imgs,train_targets,resize=(config.IMAGE_HEIGHT,config.IMAGE_WIFTH))
 
-  print(train_Dataset[0])
+  test_Dataset = Dataset.Classification(test_imgs,test_targetsresize=(config.IMAGE_HEIGHT,config.IMAGE_WIFTH))
 
+  train_DataLoader = torch.utils.data.DataLoader(
+    train_Dataset,
+    batch_size = config.BATCH_SIZE,
+    num_workers = config.NUM_WORKERS,
+    shuffle = True
+  )
+
+  test_DataLoader = torch.utils.data.DataLoader(
+    test_Dataset,
+    batch_size = config.BATCH_SIZE,
+    num_workers = config.NUM_WORKERS,
+    shuffle = False
+  )
 
 if __name__ == "__main__":
   run_training()
