@@ -1,0 +1,7 @@
+DATA_DIR = "./input/samples/"
+BATCH_SIZE = 8
+IMAGE_WIFTH = 300
+IMAGE_HEIGHT = 75
+NUM_WORKERS = 8
+EPOCH = 200
+DEVICE = "cuda"

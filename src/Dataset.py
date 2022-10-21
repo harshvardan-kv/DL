@@ -9,7 +9,7 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
 class Classification:
-  def __init__(self, image_path , target , resize =None):
+  def __init__(self, image_path , target=None , resize =None):
     self.image_path = image_path
     self.target = target
     self.resize = resize
