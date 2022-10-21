@@ -1,5 +1,6 @@
 import os
 import glob
+from scipy.sparse.compressed import operator
 import torch
 import numpy as np
 from sklearn import preprocessing
@@ -8,7 +9,8 @@ from sklearn import metrics
 
 import config
 import Dataset
-
+from model import Captcha
+import engine
 def run_training():
   image_files = glob.glob(os.path.join(config.DATA_DIR,"*.png"))
   target_orig = [x.split("/")[-1][:-4] for x in image_files]
@@ -45,6 +47,18 @@ def run_training():
     shuffle = False
   )
 
+  model = Captcha(num_chars=len(lbl_enc.classes_))
+  model.to(config.DEVICE)
+
+  optimizer = torch.optim.Adam(model.parameters(),lr = 3e-4)
+  scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+    optimizer, factor=0.8, patience=5, verbose=True
+  )
+
+  for epoch in range(config.EPOCH):
+    train_loss= engine.train_fn(model,train_DataLoader,optimizer)
+    train_loss= engine.train_fn(model,train_DataLoader,optimizer)
+    valid_preds,valid_loss = engine.eval_fn(model,train_DataLoader)
 if __name__ == "__main__":
   run_training()
 
