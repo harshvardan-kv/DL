@@ -31,7 +31,7 @@ def run_training():
 
   train_Dataset = Dataset.Classification(train_imgs,train_targets,resize=(config.IMAGE_HEIGHT,config.IMAGE_WIFTH))
 
-  test_Dataset = Dataset.Classification(test_imgs,test_targetsresize=(config.IMAGE_HEIGHT,config.IMAGE_WIFTH))
+  test_Dataset = Dataset.Classification(test_imgs,test_targets,resize=(config.IMAGE_HEIGHT,config.IMAGE_WIFTH))
 
   train_DataLoader = torch.utils.data.DataLoader(
     train_Dataset,
@@ -57,8 +57,7 @@ def run_training():
 
   for epoch in range(config.EPOCH):
     train_loss= engine.train_fn(model,train_DataLoader,optimizer)
-    train_loss= engine.train_fn(model,train_DataLoader,optimizer)
-    valid_preds,valid_loss = engine.eval_fn(model,train_DataLoader)
+    valid_loss = engine.eval_fn(model,train_DataLoader)
 if __name__ == "__main__":
   run_training()
 
