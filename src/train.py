@@ -15,7 +15,7 @@ from pprint import pprint
 
 
 def decode_preditictions(preds,encoder):
-  preds = preds.premute(1,0,2)
+  preds = preds.permute(1,0,2)
   preds = torch.softmax(preds,2)
   preds = torch.argmax(preds,2)
   preds = preds.detach().cpu().numpy()
@@ -25,9 +25,9 @@ def decode_preditictions(preds,encoder):
     for k in preds[j,:]:
       k = k-1
       if k == -1:
-        temp.append["~"]
+        temp.append["|"]
       else:
-        temp.append(encoder.inver_transform([k])[0])
+        temp.append(encoder.inverse_transform([k])[0])
     tp = "".join(temp)
     cap_preds.append(tp)
   return cap_preds
