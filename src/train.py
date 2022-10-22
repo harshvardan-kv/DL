@@ -11,6 +11,29 @@ import config
 import Dataset
 from model import Captcha
 import engine
+from pprint import pprint
+
+
+def decode_preditictions(preds,encoder):
+  preds = preds.premute(1,0,2)
+  preds = torch.softmax(preds,2)
+  preds = torch.argmax(preds,2)
+  preds = preds.detach().cpu().numpy()
+  cap_preds = []
+  for j in range(preds.shape[0]):
+    temp = []
+    for k in preds[j,:]:
+      k = k-1
+      if k == -1:
+        temp.append["~"]
+      else:
+        temp.append(encoder.inver_transform([k])[0])
+    tp = "".join(temp)
+    cap_preds.append(tp)
+  return cap_preds
+  
+
+
 def run_training():
   image_files = glob.glob(os.path.join(config.DATA_DIR,"*.png"))
   target_orig = [x.split("/")[-1][:-4] for x in image_files]
@@ -57,7 +80,13 @@ def run_training():
 
   for epoch in range(config.EPOCH):
     train_loss= engine.train_fn(model,train_DataLoader,optimizer)
-    valid_loss = engine.eval_fn(model,train_DataLoader)
+    fin_pred,valid_loss = engine.eval_fn(model,train_DataLoader)
+    valid_cap_pred=[]
+    for vp in fin_pred:
+      current_preds = decode_preditictions(vp,lbl_enc)
+      valid_cap_pred.extend(current_preds)
+    pprint(list(zip(test_orig_targets,valid_cap_pred))[6:11])
+    pprint(f"EPOCH: {epoch}, train loss: {train_loss}, validation loss : {valid_loss}")
 if __name__ == "__main__":
   run_training()
 
